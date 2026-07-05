@@ -10,7 +10,7 @@ Aqui você encontrará todo o material de apoio, cronograma e orientações da n
 === "💻 Código de Exemplo"
     ```python
     def saudacao():
-        print("Olá, aluno da UNA! Pronto para codar?")
+        print("Olá, aluno da UNI! Pronto para codar?")
     
     saudacao()
     ```

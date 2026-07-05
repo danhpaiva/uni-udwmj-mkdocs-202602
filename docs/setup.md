@@ -1,6 +1,6 @@
 # 🛠️ Guia de Início Rápido
 
-Este template foi desenvolvido para facilitar a criação de materiais didáticos modernos e automatizados para a UNA. Siga os passos abaixo para configurar seu ambiente.
+Este template foi desenvolvido para facilitar a criação de materiais didáticos modernos e automatizados para a UNI. Siga os passos abaixo para configurar seu ambiente.
 
 ---
 
