@@ -115,6 +115,83 @@ const pares = numeros.filter((n) => n % 2 === 0); // [2, 4]
 const emDobro = numeros.map((n) => n * 2);        // [2, 4, 6, 8]
 ```
 
+## Template literals e strings
+
+Use crases (`` ` ``) para interpolar variáveis sem concatenar com `+` — muito útil para montar as saídas dos exercícios:
+
+```js
+const nome = "Ana";
+const nota = 8.5;
+console.log(`${nome} tirou ${nota} e foi ${nota >= 6 ? "aprovada" : "reprovada"}`);
+```
+
+Métodos de string frequentes:
+
+```js
+"JavaScript".length;            // 10
+"olá".toUpperCase();            // "OLÁ"
+"  texto  ".trim();             // "texto"
+"a,b,c".split(",");             // ["a", "b", "c"]
+"FizzBuzz".includes("Buzz");    // true
+```
+
+## Verdadeiro, falso e o operador ternário
+
+Em condições, alguns valores contam como "falso" (**falsy**): `false`, `0`, `""`, `null`, `undefined`, `NaN`. Todo o resto é **truthy**.
+
+```js
+const lista = [];
+if (lista.length) { /* não entra: 0 é falsy */ }
+
+// ternário: condição ? seValor : senão
+const status = nota >= 6 ? "Aprovado" : "Reprovado";
+```
+
+## Escopo: onde a variável "existe"
+
+`let` e `const` têm **escopo de bloco**: só existem dentro das `{ }` onde foram declaradas.
+
+```js
+if (true) {
+  const x = 10;
+}
+// console.log(x); // ❌ erro: x não existe aqui
+```
+
+!!! warning "Cuidado dentro de laços"
+    Declarar `const` dentro de um `for` cria uma variável **nova a cada volta** — isso é o comportamento desejado. Já variáveis declaradas fora do laço são compartilhadas entre as iterações.
+
+## Métodos de array que resolvem os exercícios
+
+Além de `filter` e `map` (Exercício 3), conheça:
+
+```js
+const numeros = [1, 2, 3, 4, 5];
+
+numeros.forEach((n) => console.log(n)); // executa algo para cada item
+numeros.reduce((soma, n) => soma + n, 0); // 15 — "reduz" a um único valor
+numeros.includes(3);                      // true
+numeros.find((n) => n > 3);               // 4 — o primeiro que satisfaz
+```
+
+!!! tip "A média com `reduce`"
+    A calculadora do Exercício 1 fica elegante assim:
+    ```js
+    const media = notas.reduce((s, n) => s + n, 0) / notas.length;
+    ```
+
+## Percorrendo objetos
+
+```js
+const carro = { marca: "Fiat", ano: 2022 };
+Object.keys(carro);    // ["marca", "ano"]
+Object.values(carro);  // ["Fiat", 2022]
+
+for (const [chave, valor] of Object.entries(carro)) {
+  console.log(`${chave}: ${valor}`);
+}
+```
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Calculadora de média"
@@ -128,3 +205,11 @@ const emDobro = numeros.map((n) => n * 2);        // [2, 4, 6, 8]
 
 !!! tip "Próxima Parada"
     Você sabe a lógica — agora vamos **mexer na página de verdade** manipulando o DOM. Antes, resolva a 👉 [**Lista 08**](../listas/08-lista.md).
+
+## 📚 Referências
+
+- [MDN — Primeiros passos com JavaScript](https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript/First_steps)
+- [javascript.info — O Tutorial JavaScript Moderno](https://javascript.info/)
+- [MDN — Métodos de Array](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array)
+- [MDN — Guia de JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide)
+- [web.dev — Learn JavaScript](https://web.dev/learn/javascript/)

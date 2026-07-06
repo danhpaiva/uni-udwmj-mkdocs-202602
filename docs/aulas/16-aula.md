@@ -108,6 +108,70 @@ Para jogos maiores, engines cuidam de loop, física, sprites e áudio para você
 !!! info "Quando usar uma engine?"
     Canvas puro é ótimo para **aprender os fundamentos**. Ao crescer (muitos sprites, física, cenas), uma engine poupa meses de trabalho. Mas os conceitos que você aprendeu aqui continuam valendo por baixo.
 
+## Organizando o código do jogo
+
+Conforme o jogo cresce, separe responsabilidades. Um padrão simples e eficaz:
+
+```js
+const jogo = {
+  entidades: [],                 // tudo que existe na tela
+  update(dt) { /* lógica/física */ },
+  render(ctx) { /* desenho */ },
+};
+```
+
+!!! tip "Update x Render"
+    Mantenha **atualizar** (mudar posições, checar colisões) separado de **desenhar** (só pinta o estado atual). Isso facilita achar bugs: se algo está errado na lógica, você olha o `update`; se está feio, olha o `render`.
+
+## Respondendo a uma colisão
+
+Detectar a colisão (Aula 14) é metade; a outra é **reagir**. No Pong, a bola inverte o sentido; em um coletável, o item some e o placar sobe:
+
+```js
+if (colidem(bola, raquete)) {
+  bola.vx *= -1;            // rebate
+  bola.vx *= 1.05;          // acelera um pouco (dificuldade)
+  tocar(somRebote);
+}
+```
+
+## Placar e recorde com `localStorage`
+
+O `localStorage` guarda dados no navegador **entre sessões** — perfeito para o recorde (Exercício 3):
+
+```js
+let recorde = Number(localStorage.getItem("recorde")) || 0;
+
+function fimDeJogo() {
+  if (placar > recorde) {
+    recorde = placar;
+    localStorage.setItem("recorde", recorde); // persiste
+  }
+}
+```
+
+## Som no jogo
+
+```js
+const somPonto = new Audio("assets/ponto.wav");
+function tocar(audio) {
+  audio.currentTime = 0; // rebobina, permitindo tocar em sequência rápida
+  audio.play();
+}
+```
+
+!!! warning "Áudio só após interação"
+    Navegadores bloqueiam som antes de o usuário interagir com a página. Comece o jogo (e os sons) a partir de um clique ou tecla — o que casa bem com a tela de menu ("Pressione Enter").
+
+## Dificuldade progressiva
+
+Deixe o jogo mais difícil com o tempo para manter o desafio (Exercício 3):
+
+```js
+jogo.tempo += dt;
+velocidadeInimigo = 100 + jogo.tempo * 5; // acelera aos poucos
+```
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Complete o Pong"
@@ -121,3 +185,11 @@ Para jogos maiores, engines cuidam de loop, física, sprites e áudio para você
 
 !!! tip "Parabéns, você chegou ao fim! 🎉"
     Você percorreu da primeira tag HTML até um jogo completo. Consolide tudo no **projeto integrador** (a ser definido pelo professor) e resolva a última 👉 [**Lista 16**](../listas/16-lista.md).
+
+## 📚 Referências
+
+- [MDN — Desenvolvimento de jogos](https://developer.mozilla.org/pt-BR/docs/Games)
+- [MDN — Faça um jogo estilo Breakout com Canvas puro](https://developer.mozilla.org/pt-BR/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript)
+- [MDN — `Window.localStorage`](https://developer.mozilla.org/pt-BR/docs/Web/API/Window/localStorage)
+- [Phaser — engine de jogos 2D em JavaScript](https://phaser.io/)
+- [MDN — Usando a API de Áudio Web](https://developer.mozilla.org/pt-BR/docs/Web/API/Web_Audio_API/Using_Web_Audio_API)

@@ -98,6 +98,77 @@ const lerp = (a, b, t) => a + (b - a) * t;   // t entre 0 e 1
 camera.x = lerp(camera.x, alvo.x, 0.1);       // segue suave
 ```
 
+## Operações essenciais com vetores
+
+Quase toda a movimentação de um jogo se resume a três operações:
+
+```js
+const soma    = { x: a.x + b.x, y: a.y + b.y };  // combinar deslocamentos
+const subtrai = { x: b.x - a.x, y: b.y - a.y };  // vetor "de A para B"
+const escala  = { x: a.x * k,   y: a.y * k };    // acelerar/frear (k > 1 / k < 1)
+```
+
+O vetor **de A para B** (`subtrai`) é a base para "perseguir" ou "mirar" um alvo (Exercício 2): normalize-o e multiplique pela velocidade.
+
+## Radianos e graus
+
+Funções trigonométricas do JS usam **radianos**. Guarde as conversões:
+
+$$ \text{radianos} = \text{graus} \times \frac{\pi}{180} \qquad \text{graus} = \text{radianos} \times \frac{180}{\pi} $$
+
+```js
+const paraRad = (g) => g * Math.PI / 180;
+const paraGraus = (r) => r * 180 / Math.PI;
+```
+
+| Ângulo | Radianos |
+| :----- | :------- |
+| 0° | `0` |
+| 90° | `Math.PI / 2` |
+| 180° | `Math.PI` |
+| 360° | `Math.PI * 2` |
+
+## Produto escalar (dot product)
+
+O **produto escalar** revela o quanto dois vetores "apontam para a mesma direção":
+
+$$ \vec{a} \cdot \vec{b} = a_x b_x + a_y b_y $$
+
+```js
+const dot = a.x * b.x + a.y * b.y;
+// dot > 0 → mesmo sentido | dot = 0 → perpendiculares | dot < 0 → sentidos opostos
+```
+
+É útil, por exemplo, para saber se um inimigo está **à frente** ou **atrás** do jogador.
+
+## Colisão AABB (caixas retangulares)
+
+Nem tudo é círculo. Para retângulos alinhados aos eixos, use **AABB**: há colisão quando eles se sobrepõem **nos dois eixos** ao mesmo tempo.
+
+```js
+function colidemAABB(a, b) {
+  return (
+    a.x < b.x + b.w &&
+    a.x + a.w > b.x &&
+    a.y < b.y + b.h &&
+    a.y + a.h > b.y
+  );
+}
+```
+
+!!! tip "Qual colisão usar?"
+    - **Círculos** (distância entre centros): personagens, projéteis redondos.
+    - **AABB** (caixas): plataformas, paredes, tiles — mais barato de calcular.
+
+## Velocidade e aceleração
+
+Movimento realista separa **velocidade** (muda a posição) de **aceleração** (muda a velocidade), como a gravidade:
+
+```js
+obj.vy += gravidade;  // aceleração altera a velocidade
+obj.y  += obj.vy;     // velocidade altera a posição
+```
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Distância e colisão"
@@ -111,3 +182,11 @@ camera.x = lerp(camera.x, alvo.x, 0.1);       // segue suave
 
 !!! tip "Próxima Parada"
     Com a matemática na ponta dos dedos, vamos finalmente **desenhar e animar** com o Canvas. Antes, resolva a 👉 [**Lista 14**](../listas/14-lista.md).
+
+## 📚 Referências
+
+- [The Nature of Code — Daniel Shiffman (livro gratuito)](https://natureofcode.com/)
+- [MDN — Detecção de colisão 2D](https://developer.mozilla.org/pt-BR/docs/Games/Techniques/2D_collision_detection)
+- [MDN — Movimento e física em jogos](https://developer.mozilla.org/en-US/docs/Games/Techniques)
+- [MDN — Objeto `Math`](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Math)
+- [Red Blob Games — matemática de jogos com visualizações](https://www.redblobgames.com/)

@@ -94,6 +94,59 @@ footer { grid-area: footer; }
 
 Os cards se reorganizam sozinhos conforme a largura da tela — um aperitivo da próxima aula.
 
+## Propriedades dos itens flex
+
+Além das propriedades do container, cada **item** pode se ajustar individualmente — essencial para a barra de navegação do Exercício 1:
+
+```css
+.logo { flex: 0 0 auto; }   /* não cresce, não encolhe */
+.espaco { flex: 1; }        /* ocupa todo o espaço livre */
+.item-especial { align-self: flex-end; } /* alinha só este item */
+```
+
+A propriedade `flex` é um atalho para três valores:
+
+| Valor | Significa |
+| :---- | :-------- |
+| `flex-grow` | Quanto o item **cresce** para preencher o espaço |
+| `flex-shrink` | Quanto o item **encolhe** quando falta espaço |
+| `flex-basis` | Tamanho **inicial** antes de crescer/encolher |
+
+!!! tip "O truque do `margin-left: auto`"
+    Para empurrar um item (ou grupo) para a extremidade oposta em Flexbox, use `margin-left: auto`. É uma alternativa elegante ao `justify-content: space-between` quando só um item precisa ir para a direita.
+
+## Grid: posicionando por linhas
+
+Além das áreas nomeadas, você pode posicionar itens indicando **em quais linhas** do grid eles começam e terminam:
+
+```css
+.item {
+  grid-column: 1 / 3;  /* da linha 1 até a 3 (ocupa 2 colunas) */
+  grid-row: 1 / 2;
+}
+.destaque {
+  grid-column: span 2; /* ocupa 2 colunas a partir de onde estiver */
+}
+```
+
+Alinhamento **dentro** do grid:
+
+| Propriedade | Controla |
+| :---------- | :------- |
+| `justify-items` | Alinhamento horizontal dos itens nas células |
+| `align-items` | Alinhamento vertical dos itens nas células |
+| `place-items` | Atalho para os dois de uma vez |
+
+```css
+.grade {
+  display: grid;
+  place-items: center; /* centraliza tudo nas células */
+}
+```
+
+!!! info "Flexbox **e** Grid, não Flexbox **ou** Grid"
+    O layout do Exercício 2 (Holy Grail) usa **Grid** para a estrutura da página, mas cada célula (como o cabeçalho) pode usar **Flexbox** internamente para alinhar seus itens. Eles trabalham juntos.
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Barra de navegação"
@@ -107,3 +160,11 @@ Os cards se reorganizam sozinhos conforme a largura da tela — um aperitivo da 
 
 !!! tip "Próxima Parada"
     Seus layouts já se adaptam um pouco — na próxima aula assumimos o controle total com **Mobile First** e media queries. Antes, encare a 👉 [**Lista 03**](../listas/03-lista.md).
+
+## 📚 Referências
+
+- [CSS-Tricks — Guia completo do Flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+- [CSS-Tricks — Guia completo do Grid](https://css-tricks.com/snippets/css/complete-guide-grid/)
+- [MDN — Flexbox](https://developer.mozilla.org/pt-BR/docs/Web/CSS/CSS_flexible_box_layout/Basic_concepts_of_flexbox)
+- [MDN — CSS Grid Layout](https://developer.mozilla.org/pt-BR/docs/Web/CSS/CSS_grid_layout)
+- [Flexbox Froggy](https://flexboxfroggy.com/#pt-br) e [Grid Garden](https://cssgridgarden.com/#pt-br) — jogos para praticar

@@ -108,6 +108,67 @@ Eventos comuns:
     });
     ```
 
+## O objeto do evento
+
+Toda função de evento recebe um objeto com informações sobre o que aconteceu:
+
+```js
+input.addEventListener("input", (evento) => {
+  console.log(evento.target);       // o elemento que disparou
+  console.log(evento.target.value); // o valor digitado
+  console.log(evento.type);         // "input"
+});
+```
+
+| Propriedade / método | Uso |
+| :------------------- | :-- |
+| `evento.target` | Elemento que originou o evento |
+| `evento.target.value` | Valor de um campo de formulário |
+| `evento.key` | Tecla pressionada (em `keydown`) |
+| `evento.preventDefault()` | Cancela o comportamento padrão |
+
+!!! tip "Lendo o que o usuário digitou (Exercício 3)"
+    Para a validação de senha ao vivo, escute o evento `input` e leia `evento.target.value.length`. Ele dispara a **cada tecla**, diferente do `change` (que só dispara ao sair do campo).
+
+## Delegação de eventos
+
+No Exercício 2 (todo-list), cada item novo precisa de um botão "remover". Em vez de adicionar um listener a cada botão, adicione **um só** na lista e descubra o clique pelo `target`:
+
+```js
+lista.addEventListener("click", (evento) => {
+  if (evento.target.matches(".remover")) {
+    evento.target.closest("li").remove();
+  }
+});
+```
+
+Isso é **delegação**: funciona até para elementos criados **depois**, e é mais eficiente.
+
+## Guardando dados no HTML: `dataset`
+
+Atributos `data-*` armazenam informações no próprio elemento, úteis para saber "qual item" foi clicado:
+
+```html
+<button class="remover" data-id="42">Remover</button>
+```
+
+```js
+const id = evento.target.dataset.id; // "42"
+```
+
+## Criando muitos elementos com eficiência
+
+Montar HTML por concatenação é rápido de escrever:
+
+```js
+lista.innerHTML = tarefas
+  .map((t) => `<li>${t} <button class="remover">✕</button></li>`)
+  .join("");
+```
+
+!!! warning "`innerHTML` e segurança"
+    Nunca insira texto vindo do usuário direto em `innerHTML` sem tratamento — isso abre brecha para **XSS** (injeção de script). Para texto simples, prefira `textContent`, que não interpreta HTML.
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Alternador de tema"
@@ -121,3 +182,11 @@ Eventos comuns:
 
 !!! tip "Próxima Parada"
     Sua página já reage ao usuário — agora vamos buscar dados da internet com JavaScript **assíncrono**. Antes, resolva a 👉 [**Lista 09**](../listas/09-lista.md).
+
+## 📚 Referências
+
+- [MDN — Manipulando documentos (DOM)](https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript/Client-side_web_APIs/Manipulating_documents)
+- [MDN — Introdução a eventos](https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript/Building_blocks/Events)
+- [MDN — Referência do DOM](https://developer.mozilla.org/pt-BR/docs/Web/API/Document_Object_Model)
+- [javascript.info — Documento e eventos](https://javascript.info/document)
+- [MDN — Segurança e XSS](https://developer.mozilla.org/pt-BR/docs/Web/Security/Types_of_attacks#cross-site_scripting_xss)

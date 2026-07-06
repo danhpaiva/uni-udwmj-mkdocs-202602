@@ -69,6 +69,71 @@ a:focus-visible {
 !!! tip "Ferramentas"
     Teste com o **Lighthouse** (DevTools → aba *Lighthouse*) e navegue na sua página **usando só o `Tab`**. Se você não consegue, um usuário de teclado também não.
 
+## Os níveis de conformidade WCAG
+
+O WCAG define três níveis. A maioria das leis e empresas exige o nível **AA**:
+
+| Nível | Significado | Exemplo de critério |
+| :---- | :---------- | :------------------ |
+| **A** | Mínimo | Todo conteúdo não textual tem alternativa |
+| **AA** | **Recomendado** | Contraste de 4.5:1; foco visível |
+| **AAA** | Ideal | Contraste de 7:1 (nem sempre viável) |
+
+## Formulários acessíveis (Exercício 2)
+
+O erro mais comum é o campo sem rótulo associado. Há duas formas corretas:
+
+=== "`for` + `id`"
+    ```html
+    <label for="email">E-mail</label>
+    <input id="email" type="email" name="email" />
+    ```
+
+=== "`<label>` envolvendo"
+    ```html
+    <label>
+      E-mail
+      <input type="email" name="email" />
+    </label>
+    ```
+
+!!! tip "Descreva erros com texto e ARIA"
+    ```html
+    <input id="cep" aria-describedby="erro-cep" aria-invalid="true" />
+    <span id="erro-cep">CEP inválido: use 8 dígitos.</span>
+    ```
+    Assim o leitor de tela anuncia o erro junto com o campo — e não dependemos só da cor vermelha.
+
+## Roles, states e properties do ARIA
+
+O ARIA se divide em três tipos de atributos:
+
+| Tipo | Exemplo | Diz o quê |
+| :--- | :------ | :-------- |
+| **Role** | `role="dialog"` | O **papel** do elemento |
+| **State** | `aria-expanded="true"` | Um **estado** que muda |
+| **Property** | `aria-label="Fechar"` | Uma **característica** fixa |
+
+```html
+<button aria-label="Fechar" aria-controls="modal" aria-expanded="false">✕</button>
+```
+
+## Navegação por teclado (Exercício 3)
+
+Elementos interativos nativos (`<a>`, `<button>`, `<input>`) já entram na ordem de `Tab`. Pontos de atenção:
+
+- **`tabindex="0"`** insere um elemento na ordem natural de tabulação.
+- **`tabindex="-1"`** o torna focável só por script (útil em modais).
+- **Nunca** use `tabindex` com valores positivos (`1`, `2`...): bagunçam a ordem.
+- Um foco que "some" quase sempre é `outline: none` sem substituto — use `:focus-visible`.
+
+```css
+:focus-visible {
+  outline: 3px solid #7c4dff;
+  outline-offset: 2px;
+}
+```
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Auditoria com Lighthouse"
@@ -82,3 +147,11 @@ a:focus-visible {
 
 !!! tip "Próxima Parada"
     Antes de programar telas, é hora de **desenhar e testar ideias** rapidamente. Na próxima aula: prototipagem. Antes, resolva a 👉 [**Lista 06**](../listas/06-lista.md).
+
+## 📚 Referências
+
+- [MDN — Acessibilidade](https://developer.mozilla.org/pt-BR/docs/Learn/Accessibility)
+- [W3C WAI — Introdução à Acessibilidade Web](https://www.w3.org/WAI/fundamentals/accessibility-intro/pt-br)
+- [WCAG 2.1 (recomendação oficial)](https://www.w3.org/TR/WCAG21/)
+- [W3C — ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
+- [Chrome — Lighthouse](https://developer.chrome.com/docs/lighthouse/overview/)

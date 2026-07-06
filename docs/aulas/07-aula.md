@@ -64,6 +64,46 @@ Duas famílias de métodos:
 !!! warning "Teste tarefas, não pessoas"
     Deixe claro: "estamos testando o **produto**, não você". Se o usuário errar, o problema é do design.
 
+## Conceitos-chave do Figma
+
+Para os Exercícios 1 e 2, você precisa dominar quatro conceitos do Figma:
+
+| Conceito | O que é |
+| :------- | :------ |
+| **Frame** | Uma "tela" (ex.: um celular 390×844) onde você desenha |
+| **Componente** | Um elemento reutilizável (botão, card); editar o mestre atualiza todas as cópias |
+| **Auto Layout** | Faz o conteúdo se ajustar sozinho, como o Flexbox |
+| **Prototype** | A aba que liga elementos a telas de destino, criando a navegação |
+
+!!! tip "Do wireframe ao clicável"
+    Desenhe cada tela em um **Frame**. Depois, na aba **Prototype**, arraste uma "setinha" de um botão até a tela de destino e escolha a interação (*On click → Navigate to*). Pronto: seu wireframe virou protótipo navegável.
+
+## Anatomia de um wireframe
+
+Um bom wireframe de média fidelidade mostra, sem cores nem conteúdo final:
+
+- **Hierarquia**: o que é título, o que é ação principal.
+- **Blocos de conteúdo**: retângulos representando imagens, listas, cards.
+- **Navegação**: onde estão menu, botão de voltar, ações.
+- **Estados**: lista vazia, carregando, erro (não só o "caminho feliz").
+
+## Métodos de teste (Exercício 3)
+
+=== "Moderado x não moderado"
+    - **Moderado:** um facilitador acompanha em tempo real e pode fazer perguntas.
+    - **Não moderado:** o usuário faz sozinho; escala melhor, mas você perde o "porquê".
+
+=== "O que medir"
+    | Métrica | Pergunta |
+    | :------ | :------- |
+    | Taxa de sucesso | Concluiu a tarefa? |
+    | Tempo na tarefa | Quanto demorou? |
+    | Nº de erros | Onde/quantas vezes travou? |
+    | Satisfação | Como se sentiu? (1 a 5) |
+
+!!! info "Protocolo *think aloud* (pensar em voz alta)"
+    Peça que o usuário **narre o que pensa** enquanto usa: "estou procurando o botão de comprar... não acho...". Esses comentários revelam os problemas de UX que as métricas sozinhas não mostram.
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Wireframe"
@@ -77,3 +117,11 @@ Duas famílias de métodos:
 
 !!! tip "Próxima Parada"
     Com a interface projetada e validada, é hora de dar **comportamento** a ela: entra o JavaScript! Antes, resolva a 👉 [**Lista 07**](../listas/07-lista.md).
+
+## 📚 Referências
+
+- [Central de Ajuda do Figma](https://help.figma.com/hc/pt-br)
+- [Nielsen Norman Group — Prototipagem](https://www.nngroup.com/articles/ux-prototype-hi-lo-fidelity/)
+- [Nielsen Norman Group — Testes de usabilidade](https://www.nngroup.com/articles/usability-testing-101/)
+- [Interaction Design Foundation — Prototyping](https://www.interaction-design.org/literature/topics/prototyping)
+- [Nielsen Norman Group — Por que 5 usuários bastam](https://www.nngroup.com/articles/why-you-only-need-to-test-with-5-users/)

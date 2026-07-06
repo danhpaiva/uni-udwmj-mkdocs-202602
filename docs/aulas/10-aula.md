@@ -101,6 +101,80 @@ await fetch(url, {
 });
 ```
 
+## Promises: os três estados
+
+Uma **Promise** é uma "promessa" de um valor futuro. Ela vive em um de três estados:
+
+```mermaid
+graph LR
+    P[pending<br/>pendente] --> F[fulfilled<br/>resolvida ✅]
+    P --> R[rejected<br/>rejeitada ❌]
+```
+
+`await` **pausa** a função até a Promise resolver (ou lançar erro, capturado pelo `catch`). Por baixo dos panos, `async/await` é só uma forma mais legível de lidar com Promises.
+
+## JSON: o idioma das APIs
+
+APIs trocam texto no formato **JSON**. Duas funções fazem a ponte com objetos JS:
+
+```js
+const obj = JSON.parse('{"nome":"Ana"}'); // texto  → objeto
+const txt = JSON.stringify({ nome: "Ana" }); // objeto → texto
+```
+
+!!! info "`resposta.json()` já faz o parse"
+    Ao chamar `await resposta.json()`, o `fetch` lê o corpo da resposta **e** converte o JSON em objeto de uma vez. Você raramente precisa de `JSON.parse` manual com `fetch`.
+
+## Montando a URL do Exercício 1
+
+O buscador de CEP concatena o valor digitado na URL da API:
+
+```js
+const cep = document.querySelector("#cep").value.replace(/\D/g, ""); // só dígitos
+const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+const dados = await resposta.json();
+
+if (dados.erro) {
+  console.log("CEP não encontrado");
+} else {
+  console.log(dados.logradouro, dados.bairro, dados.localidade);
+}
+```
+
+!!! warning "Nem todo erro é uma exceção"
+    O ViaCEP responde `200 OK` com `{ "erro": true }` para CEP inexistente. Ou seja: verifique **os dados**, não só o status HTTP.
+
+## O padrão "carregando → dados → erro"
+
+Toda tela que consome API deveria ter três estados visíveis (Exercício 2):
+
+```js
+async function carregar() {
+  const alvo = document.querySelector("#conteudo");
+  alvo.textContent = "Carregando..."; // 1. estado de carregamento
+  try {
+    const r = await fetch(url);
+    if (!r.ok) throw new Error("Erro " + r.status);
+    const dados = await r.json();
+    alvo.innerHTML = renderizar(dados);  // 2. sucesso
+  } catch (e) {
+    alvo.textContent = "Não foi possível carregar. Tente novamente."; // 3. erro
+  }
+}
+```
+
+## Bônus: várias requisições ao mesmo tempo
+
+```js
+const [usuarios, posts] = await Promise.all([
+  fetch(urlUsuarios).then((r) => r.json()),
+  fetch(urlPosts).then((r) => r.json()),
+]);
+```
+
+!!! tip "O que é CORS?"
+    Se o console acusar erro de **CORS**, é o navegador bloqueando uma resposta de outro domínio que não autorizou seu site. Não é um bug do seu código — escolha uma API que permita acesso público (como as usadas nos exercícios).
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Buscador de CEP"
@@ -114,3 +188,11 @@ await fetch(url, {
 
 !!! tip "Próxima Parada"
     Seus projetos estão crescendo — hora de organizá-los com **Git, npm e Sass**. Antes, resolva a 👉 [**Lista 10**](../listas/10-lista.md).
+
+## 📚 Referências
+
+- [MDN — Buscando dados do servidor (Fetch)](https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data)
+- [MDN — Usando Promises](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Using_promises)
+- [javascript.info — Promises, async/await](https://javascript.info/async)
+- [MDN — CORS](https://developer.mozilla.org/pt-BR/docs/Web/HTTP/CORS)
+- APIs para praticar: [ViaCEP](https://viacep.com.br/) · [JSONPlaceholder](https://jsonplaceholder.typicode.com/) · [Public APIs](https://github.com/public-apis/public-apis)

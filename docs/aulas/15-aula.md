@@ -102,6 +102,76 @@ if (teclas["ArrowLeft"]) jogador.x -= 4;
 !!! tip "Delta time (bônus)"
     Para o jogo rodar na mesma velocidade em qualquer máquina, multiplique o movimento pelo tempo entre quadros (*delta time*), em vez de somar valores fixos. `requestAnimationFrame` passa um timestamp para você calcular isso.
 
+## Caminhos: desenhando formas livres
+
+Para a cena do Exercício 1 (telhado, montanhas), você precisa de linhas e polígonos:
+
+```js
+ctx.beginPath();
+ctx.moveTo(50, 200);   // ponto inicial
+ctx.lineTo(150, 100);  // linha até aqui (topo do telhado)
+ctx.lineTo(250, 200);
+ctx.closePath();       // fecha de volta ao início
+ctx.fillStyle = "#c0392b";
+ctx.fill();
+```
+
+| Método | Faz |
+| :----- | :-- |
+| `beginPath()` | Inicia um novo traçado |
+| `moveTo(x, y)` | "Levanta a caneta" até o ponto |
+| `lineTo(x, y)` | Traça linha até o ponto |
+| `closePath()` | Liga o fim ao início |
+| `stroke()` / `fill()` | Contorna / preenche |
+
+!!! warning "Estado do contexto"
+    Propriedades como `fillStyle` e `font` **permanecem** até você trocá-las. Defina a cor **antes** de cada `fill()`, ou use `ctx.save()` / `ctx.restore()` para isolar mudanças.
+
+## Desenhando imagens e sprites
+
+Além de formas, dá para desenhar imagens (base para personagens):
+
+```js
+const img = new Image();
+img.src = "nave.png";
+img.onload = () => ctx.drawImage(img, x, y, largura, altura);
+```
+
+Um **spritesheet** guarda vários quadros de animação em uma só imagem; você recorta o quadro atual com a versão completa de `drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh)`.
+
+## Por que `requestAnimationFrame` e não `setInterval`?
+
+| | `requestAnimationFrame` | `setInterval` |
+| :-- | :---------------------- | :------------ |
+| Sincroniza com a tela | ✅ (~60 fps) | ❌ (tempo fixo) |
+| Pausa em abas ocultas | ✅ (economiza bateria) | ❌ |
+| Suavidade | Alta | Pode "tremer" |
+
+## Delta time: velocidade igual em qualquer PC
+
+Se você soma valores fixos por quadro, um monitor de 144 Hz roda o jogo mais rápido que um de 60 Hz. A solução é multiplicar pelo **tempo entre quadros**:
+
+```js
+let anterior = 0;
+function loop(agora) {
+  const dt = (agora - anterior) / 1000; // segundos desde o último quadro
+  anterior = agora;
+
+  bola.x += velocidade * dt; // movimento independente do fps
+
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+```
+
+## Mantendo o jogador na tela (Exercício 3)
+
+Depois de mover, "prenda" a posição dentro dos limites com `Math.min`/`Math.max`:
+
+```js
+jogador.x = Math.max(0, Math.min(jogador.x, canvas.width - jogador.w));
+```
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Cena estática"
@@ -115,3 +185,11 @@ if (teclas["ArrowLeft"]) jogador.x -= 4;
 
 !!! tip "Próxima Parada"
     Você tem loop, física e controle — está tudo pronto para montar um **jogo completo**! Antes, resolva a 👉 [**Lista 15**](../listas/15-lista.md).
+
+## 📚 Referências
+
+- [MDN — Tutorial de Canvas](https://developer.mozilla.org/pt-BR/docs/Web/API/Canvas_API/Tutorial)
+- [MDN — Referência da API Canvas](https://developer.mozilla.org/pt-BR/docs/Web/API/CanvasRenderingContext2D)
+- [MDN — Anatomia de um videogame (game loop)](https://developer.mozilla.org/pt-BR/docs/Games/Anatomy)
+- [MDN — `requestAnimationFrame`](https://developer.mozilla.org/pt-BR/docs/Web/API/window/requestAnimationFrame)
+- [MDN — Desenvolvimento de jogos](https://developer.mozilla.org/pt-BR/docs/Games)

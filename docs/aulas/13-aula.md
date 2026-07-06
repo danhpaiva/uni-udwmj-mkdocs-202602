@@ -81,6 +81,50 @@ if ("serviceWorker" in navigator) {
 !!! warning "HTTPS obrigatório"
     Service Workers só funcionam em **HTTPS** (ou `localhost`). O GitHub Pages já serve por HTTPS — perfeito para testar.
 
+## Como o híbrido funciona por dentro: WebView
+
+Um app híbrido roda seu HTML/CSS/JS dentro de uma **WebView** — um navegador "sem barra de endereço" embutido no app nativo. Ferramentas como o **Capacitor** ainda expõem **plugins** que dão acesso a recursos do aparelho (câmera, GPS, notificações) por meio de uma API JavaScript:
+
+```js
+import { Camera } from "@capacitor/camera";
+const foto = await Camera.getPhoto({ quality: 90 });
+```
+
+## O ciclo de vida do Service Worker
+
+O Service Worker (SW) do Exercício 3 passa por fases bem definidas:
+
+```mermaid
+graph LR
+    R[register] --> I[install<br/>faz cache inicial]
+    I --> A[activate<br/>limpa caches antigos]
+    A --> F[fetch<br/>intercepta requisições]
+```
+
+!!! warning "O SW controla a página só no próximo carregamento"
+    Após registrar pela primeira vez, o Service Worker só assume o controle no **próximo** `reload`. E lembre-se: ele exige **HTTPS** (ou `localhost`).
+
+## Estratégias de cache
+
+O que fazer quando a página pede um arquivo? Há padrões conhecidos:
+
+| Estratégia | Comportamento | Boa para |
+| :--------- | :------------ | :------- |
+| **Cache First** | Usa o cache; só vai à rede se faltar | Arquivos fixos (CSS, ícones) |
+| **Network First** | Tenta a rede; cai no cache se offline | Dados que mudam |
+| **Stale-While-Revalidate** | Serve o cache e atualiza em segundo plano | Equilíbrio geral |
+
+O exemplo desta aula usa **Cache First** (`caches.match(...) || fetch(...)`).
+
+## Decidindo a abordagem (Exercício 1)
+
+Use estas perguntas como guia:
+
+- Precisa de **desempenho gráfico** máximo (jogos 3D pesados)? → Nativo.
+- Quer **uma base de código** para Android + iOS com bom acesso a hardware? → Híbrido.
+- É essencialmente um **site** que ganharia com instalação e offline, sem loja? → PWA.
+- Orçamento e prazo **curtos**? → PWA ou híbrido tendem a ser mais baratos.
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Comparação fundamentada"
@@ -94,3 +138,11 @@ if ("serviceWorker" in navigator) {
 
 !!! tip "Próxima Parada"
     Mudamos de assunto: começa nossa jornada por **jogos digitais**, e ela começa com... matemática! Antes, resolva a 👉 [**Lista 13**](../listas/13-lista.md).
+
+## 📚 Referências
+
+- [MDN — Progressive Web Apps](https://developer.mozilla.org/pt-BR/docs/Web/Progressive_web_apps)
+- [web.dev — Learn PWA](https://web.dev/learn/pwa/)
+- [MDN — Usando Service Workers](https://developer.mozilla.org/pt-BR/docs/Web/API/Service_Worker_API/Using_Service_Workers)
+- [Documentação do Capacitor](https://capacitorjs.com/docs)
+- [MDN — Manifesto de Web App](https://developer.mozilla.org/pt-BR/docs/Web/Manifest)

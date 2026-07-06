@@ -95,6 +95,78 @@ npm install -D sass
 npx sass scss/main.scss css/style.css --watch
 ```
 
+## Branches: trabalhando em paralelo
+
+Uma **branch** é uma linha independente de desenvolvimento. Você cria uma para uma tarefa, trabalha nela e depois **junta** (merge) na principal:
+
+```bash
+git switch -c feature/menu   # cria e entra na branch
+# ...faz commits...
+git switch main              # volta para a principal
+git merge feature/menu       # traz as mudanças
+```
+
+```mermaid
+gitGraph
+    commit
+    branch feature/menu
+    commit
+    commit
+    checkout main
+    merge feature/menu
+```
+
+!!! tip "Anatomia de um commit Conventional Commits"
+    `tipo(escopo opcional): descrição`
+    ```text
+    feat: adiciona validação no formulário
+    fix(login): corrige botão que não respondia
+    docs: atualiza o README
+    ```
+    Os tipos mais comuns: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `build`, `ci`.
+
+## Versionamento semântico (SemVer)
+
+O `^1.77.0` no `package.json` segue o padrão **MAJOR.MINOR.PATCH**:
+
+| Parte | Muda quando... | Exemplo |
+| :---- | :------------- | :------ |
+| **MAJOR** | Há quebra de compatibilidade | 1.0.0 → 2.0.0 |
+| **MINOR** | Adiciona recurso compatível | 1.1.0 → 1.2.0 |
+| **PATCH** | Corrige bug | 1.1.1 → 1.1.2 |
+
+O `^` permite atualizações de MINOR e PATCH; o `~` só de PATCH.
+
+!!! info "`package.json` x `package-lock.json`"
+    O `package.json` lista o que você **quer**; o `package-lock.json` grava as versões **exatas** instaladas, garantindo que todos na equipe tenham o mesmo. Versione **os dois** (mas nunca o `node_modules/`).
+
+## Sass além do básico: partials e mixins
+
+Para o Exercício 2, vale organizar o SCSS em arquivos e reutilizar blocos:
+
+=== "Partials + `@use`"
+    ```scss
+    // _variaveis.scss (o "_" indica um partial)
+    $cor-primaria: #7c4dff;
+
+    // main.scss
+    @use "variaveis" as v;
+    .botao { background: v.$cor-primaria; }
+    ```
+
+=== "Mixins"
+    ```scss
+    @mixin flex-centro {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card { @include flex-centro; }
+    ```
+
+!!! tip "`--watch` economiza tempo"
+    Rode `npx sass --watch scss:css` uma vez: o Sass recompila **automaticamente** a cada vez que você salva um `.scss`.
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Repositório do zero"
@@ -108,3 +180,11 @@ npx sass scss/main.scss css/style.css --watch
 
 !!! tip "Próxima Parada"
     Com o ambiente profissional montado, vamos conhecer os **frameworks frontend** e a ideia de componentes. Antes, resolva a 👉 [**Lista 11**](../listas/11-lista.md).
+
+## 📚 Referências
+
+- [Pro Git (livro oficial, em português)](https://git-scm.com/book/pt-br/v2)
+- [Conventional Commits (em português)](https://www.conventionalcommits.org/pt-br/v1.0.0/)
+- [Documentação do npm](https://docs.npmjs.com/)
+- [Documentação do Sass](https://sass-lang.com/documentation/)
+- [SemVer — Versionamento Semântico](https://semver.org/lang/pt-BR/)

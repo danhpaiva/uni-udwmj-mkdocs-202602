@@ -79,6 +79,104 @@ Principais tags estruturais: `<header>`, `<nav>`, `<main>`, `<section>`, `<artic
 !!! tip "Regra de ouro"
     Só use `<div>` quando **nenhuma** tag semântica descrever melhor o conteúdo. `<div>` é uma caixa neutra, sem significado.
 
+## Elementos de bloco x elementos em linha
+
+Todo elemento HTML tem um comportamento de exibição padrão:
+
+=== "Bloco (block)"
+    Ocupam **toda a largura** disponível e começam em uma nova linha. Ex.: `<div>`, `<p>`, `<h1>`–`<h6>`, `<section>`, `<ul>`, `<li>`.
+
+=== "Em linha (inline)"
+    Ocupam **apenas o espaço do conteúdo** e ficam lado a lado. Ex.: `<a>`, `<span>`, `<strong>`, `<em>`, `<img>`.
+
+!!! warning "Regras de aninhamento"
+    Elementos em linha **não devem** conter elementos de bloco. Ex.: um `<a>` pode envolver um `<span>`, mas evite colocar um `<div>` dentro de um `<span>`. Já um `<li>` só faz sentido dentro de `<ul>` ou `<ol>`.
+
+## As tags que você mais vai usar
+
+### Títulos e parágrafos
+
+Use `<h1>` a `<h6>` para criar uma **hierarquia**. Deve existir **um único `<h1>`** por página (o título principal), e os níveis não devem "pular" (não vá de `<h1>` direto para `<h3>`).
+
+```html
+<h1>Meu Portfólio</h1>
+  <h2>Sobre mim</h2>
+  <h2>Projetos</h2>
+    <h3>Projeto A</h3>
+```
+
+### Links e imagens
+
+```html
+<a href="https://exemplo.com" target="_blank" rel="noopener">Abrir site</a>
+<a href="perfil.html">Página interna</a>
+<a href="#contato">Ir para uma âncora na mesma página</a>
+
+<img src="foto.jpg" alt="Descrição da imagem para leitores de tela" />
+```
+
+| Atributo | Onde | Para que serve |
+| :------- | :--- | :------------- |
+| `href` | `<a>` | Destino do link |
+| `src` | `<img>` | Caminho do arquivo |
+| `alt` | `<img>` | Texto alternativo (acessibilidade e SEO) |
+| `target="_blank"` | `<a>` | Abre em nova aba |
+
+!!! danger "Sempre use alt em imagens"
+    Sem `alt`, leitores de tela anunciam apenas "imagem" e o SEO fica prejudicado. Se a imagem for puramente decorativa, use `alt=""` (vazio) para que seja ignorada.
+
+### Listas
+
+```html
+<!-- Ordenada: a ordem importa (passos, ranking) -->
+<ol>
+  <li>Instalar o VS Code</li>
+  <li>Instalar o Git</li>
+</ol>
+
+<!-- Não ordenada: a ordem não importa -->
+<ul>
+  <li>HTML</li>
+  <li>CSS</li>
+</ul>
+```
+
+### Tabelas
+
+Tabelas servem para **dados tabulares**, nunca para layout. A estrutura mínima é:
+
+```html
+<table>
+  <thead>
+    <tr><th>Linguagem</th><th>Ano</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>JavaScript</td><td>1995</td></tr>
+    <tr><td>Python</td><td>1991</td></tr>
+  </tbody>
+</table>
+```
+
+| Tag | Papel |
+| :-- | :---- |
+| `<table>` | A tabela |
+| `<thead>` / `<tbody>` | Cabeçalho / corpo |
+| `<tr>` | Linha (*table row*) |
+| `<th>` | Célula de cabeçalho |
+| `<td>` | Célula de dado |
+
+## Comentários e caracteres especiais
+
+```html
+<!-- Isto é um comentário: não aparece na página -->
+
+<p>Use &lt; e &gt; para escrever &lt;tags&gt; como texto.</p>
+<p>&amp; vira &, e &copy; vira ©.</p>
+```
+
+!!! info "Entidades HTML"
+    Alguns caracteres têm significado na linguagem (`<`, `>`, `&`). Para exibi-los literalmente, use **entidades**: `&lt;`, `&gt;`, `&amp;`.
+
 ## Exercícios
 
 ??? abstract "Exercício 1 — Página de perfil"
@@ -97,3 +195,11 @@ Principais tags estruturais: `<header>`, `<nav>`, `<main>`, `<section>`, `<artic
 
 !!! tip "Próxima Parada"
     Sua página está estruturada, mas "crua". Na próxima aula damos vida a ela com CSS! Antes disso, resolva a 👉 [**Lista 01**](../listas/01-lista.md).
+
+## 📚 Referências
+
+- [MDN — Introdução ao HTML](https://developer.mozilla.org/pt-BR/docs/Learn/HTML/Introduction_to_HTML)
+- [MDN — Referência de elementos HTML](https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element)
+- [MDN — HTML semântico](https://developer.mozilla.org/pt-BR/docs/Glossary/Semantics#semântica_em_html)
+- [web.dev — Learn HTML](https://web.dev/learn/html/)
+- [W3C — HTML Standard (referência oficial)](https://html.spec.whatwg.org/multipage/)
